@@ -9,22 +9,35 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+### Simulation Exercise Overview
+This report will illustrate how well sample populations can provide a reliable picture or  
+understanding of an entire population.  To do this, we will compare the sample means and  
+sample variances for different sample sizes to the theoretical mean and variance.  We  
+begin will the following information:
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+1. Evaluate exponential distribution, using rexp(n, lambda), where  
++ n = 40 [sample of 40 exponentials]  
++ lambda = 0.2  
+2. Mean, mu, of an exponential distribution is 1/lambda = 5 [1 / 0.2]  
+3. Standard deviation (s) of an exponential distribution is 1/lambda = 5  
+4. Variance, Var, of an exponential distribution is s-squared, 25  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Let's start with a simple comparison.  If we calculate the mean and variance of a large  
+exponential population, like 10,000, we would expect this to be fairly close to the  
+theoretical mean and variance.
 
-```{r cars}
-summary(cars)
+**Population Mean & Variance (10,000 observations)** 
+```{r, population_stats, include = TRUE, echo = TRUE}
+set.seed(123)
+popdat <- data.frame(rating = c(rexp(10000, 0.2)))
+
+popmean <- round(mean(popdat$rating), 3)   ## Population Mean  
+popvar <- round(var(popdat$rating), 3)     ## Population Variance
 ```
 
-## Including Plots
+As expected, the population mean of 10,000 observations is relatively close to the  
+theoretical mean, `r popmean` is quite close to the theoretical mean of 5.  The same is  
+true for variance.  A population variance of `r popvar` is close to the theoretical  
+variance of 25.
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
