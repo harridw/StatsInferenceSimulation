@@ -27,17 +27,26 @@ exponential population, like 10,000, we would expect this to be fairly close to 
 theoretical mean and variance.
 
 **Population Mean & Variance (10,000 observations)** 
-```{r, population_stats, include = TRUE, echo = TRUE}
+```{r, large_sample_data, include = TRUE, echo = TRUE}
 set.seed(123)
-popdat <- data.frame(rating = c(rexp(10000, 0.2)))
+lrg.sample <- data.frame(rating = c(rexp(10000, 0.2)))
 
-popmean <- round(mean(popdat$rating), 3)   ## Population Mean  
-popvar <- round(var(popdat$rating), 3)     ## Population Variance
+sample.mean <- round(mean(lrg.sample$rating), 3)   ## Population Mean  
+sample.var <- round(var(lrg.sample$rating), 3)     ## Population Variance
+sample.sd <- round(sd(lrg.sample$rating), 3)       ## Population Standard Deviation
 ```
 
 As expected, the population mean of 10,000 observations is relatively close to the  
-theoretical mean, `r popmean` is quite close to the theoretical mean of 5.  The same is  
-true for variance.  A population variance of `r popvar` is close to the theoretical  
-variance of 25.
+theoretical mean, `r sample.mean` is quite close to the theoretical mean of 5.  The same  
+is true for variance.  The large sample variance of `r sample.var` is close to the  
+theoretical variance of 25.
+
+Let's look at a density distribution of the Random Exponsential values
+```{r population_density_histogram, include = TRUE, echo = FALSE}
+hist(lrg.sample$rating, prob = TRUE, breaks = 40, col = "red", xlab = "", ylim = c(0, .2),
+     main = "Distribution of Random Exponentials (10k)", cex.main = 0.5)
+abline(v = 5, col = "black", lwd = 2)
+
+
 
 
