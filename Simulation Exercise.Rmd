@@ -1,7 +1,7 @@
 ---
 title: "Statistical Inference (Simulation Exercise)"
 author: "EHarris"
-date: "6/23/2017"
+date: "6/25/2017"
 output: html_document
 ---
 
@@ -82,7 +82,7 @@ plot(sim.mean, type = "l", lwd = 1, col = "black", ylim = c(4,5.5),
      xlab = "Number of Simulations",
      ylab = "Cumulative Mean",
      main = "Sample Mean vs. Theoretical Mean", cex.main = 0.5)
-abline(h = 1/mlambda, lwd = 2, col = "red")
+abline(h = 1/mlambda, lwd = 2, col = "red")         ## Line for Theoretical Mean
 ```
 
 #### Sample Variance Simulations
@@ -107,13 +107,13 @@ will be more consistent with the theoretical mean.
 
 Below is a comparison graph of the sample mean for each simulation to the theoretical  
 mean.
-```{r plot_simulation_mean_vs_theoretical, include = TRUE, echo = TRUE}
+```{r plot_simulation_variance_vs_theoretical, include = TRUE, echo = TRUE}
 sim.var <- cumsum(mns) / (1:vsims)
-plot(sim.var, type = "l", lwd = 1, col = "black", ylim = c(0,1),
+plot(sim.var, type = "l", lwd = 1, col = "black",
      xlab = "Number of Simulations",
      ylab = "Cumulative Variance",
      main = "Sample Variance vs. Theoretical Variance", cex.main = 0.5)
-abline(h = (1/vlambda)^2/n, lwd = 2, col = "red")
+#abline(h = (1/vlambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
 ```
 
 
