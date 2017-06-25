@@ -10,13 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Simulation Exercise Overview
-This report will illustrate how well sample populations can provide a reliable picture or  
-understanding of an entire population.  To do this, we will compare the sample means and  
-sample variances for different sample sizes to the theoretical mean and variance.
+This report will illustrate how well sample populations can provide a reliable picture or understanding of an entire population.  To do this, we will compare the sample means and sample variances for different sample sizes to the theoretical mean and variance.
 
-Let's start with a simple comparison.  If we calculate the mean and variance of a large  
-exponential sample population, like 10,000, we would expect this to be fairly close to  
-the theoretical mean and variance.
+Let's start with a simple comparison.  If we calculate the mean and variance of a large exponential sample population, like 10,000, we would expect this to be fairly close to the theoretical mean and variance.
 
 **Large Sample Mean & Variance (10,000 observations)** 
 ```{r, large_sample_data, include = TRUE, echo = TRUE}
@@ -36,7 +32,7 @@ theoretical variance of 25.
 Let's look at a density distribution of the Random Exponsential values
 ```{r population_density_histogram, include = TRUE, echo = FALSE}
 hist(lrg.sample$rating, prob = TRUE, breaks = 40, col = "red", xlab = "", ylim = c(0, .2),
-     main = "Distribution of Random Exponentials (10k)", cex.main = 0.5)
+     main = "Distribution of Random Exponentials (10k)", cex.main = 1.0)
 abline(v = 5, col = "black", lwd = 2)
 ```
 
@@ -78,10 +74,10 @@ Below is a comparison graph of the sample mean for each simulation to the theore
 mean.
 ```{r plot_simulation_mean_vs_theoretical, include = TRUE, echo = TRUE}
 sim.mean <- cumsum(mns) / (1:msims)
-plot(sim.mean, type = "l", lwd = 1, col = "black", ylim = c(4,5.5),
+plot(sim.mean, type = "l", lwd = 2, col = "black", ylim = c(4,5.5),
      xlab = "Number of Simulations",
      ylab = "Cumulative Mean",
-     main = "Sample Mean vs. Theoretical Mean", cex.main = 0.5)
+     main = "Sample Mean vs. Theoretical Mean", cex.main = 1.0)
 abline(h = 1/mlambda, lwd = 2, col = "red")         ## Line for Theoretical Mean
 ```
 
@@ -109,11 +105,11 @@ Below is a comparison graph of the sample mean for each simulation to the theore
 mean.
 ```{r plot_simulation_variance_vs_theoretical, include = TRUE, echo = TRUE}
 sim.var <- cumsum(mns) / (1:vsims)
-plot(sim.var, type = "l", lwd = 1, col = "black",
+plot(sim.var, type = "l", lwd = 2, col = "black", ylim = c(10,30),
      xlab = "Number of Simulations",
      ylab = "Cumulative Variance",
-     main = "Sample Variance vs. Theoretical Variance", cex.main = 0.5)
-#abline(h = (1/vlambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
+     main = "Sample Variance vs. Theoretical Variance", cex.main = 1.0)
+abline(h = (1/vlambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
 ```
 
 
