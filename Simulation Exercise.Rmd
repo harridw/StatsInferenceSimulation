@@ -12,23 +12,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Simulation Exercise Overview
 This report will illustrate how well sample populations can provide a reliable picture or  
 understanding of an entire population.  To do this, we will compare the sample means and  
-sample variances for different sample sizes to the theoretical mean and variance.  We  
-begin will the following information:
-
-1. Evaluate exponential distribution, using rexp(n, lambda), where  
-+ n = 40 [sample of 40 exponentials]  
-+ lambda = 0.2  
-2. Mean, mu, of an exponential distribution is 1/lambda = 5 [1 / 0.2]  
-3. Standard deviation (s) of an exponential distribution is 1/lambda = 5  
-4. Variance, Var, of an exponential distribution is s-squared, 25  
+sample variances for different sample sizes to the theoretical mean and variance.
 
 Let's start with a simple comparison.  If we calculate the mean and variance of a large  
-exponential population, like 10,000, we would expect this to be fairly close to the  
-theoretical mean and variance.
+exponential sample population, like 10,000, we would expect this to be fairly close to  
+the theoretical mean and variance.
 
-**Population Mean & Variance (10,000 observations)** 
+**Large Sample Mean & Variance (10,000 observations)** 
 ```{r, large_sample_data, include = TRUE, echo = TRUE}
-set.seed(123)
+set.seed(100)
 lrg.sample <- data.frame(rating = c(rexp(10000, 0.2)))
 
 sample.mean <- round(mean(lrg.sample$rating), 3)   ## Population Mean  
@@ -46,7 +38,82 @@ Let's look at a density distribution of the Random Exponsential values
 hist(lrg.sample$rating, prob = TRUE, breaks = 40, col = "red", xlab = "", ylim = c(0, .2),
      main = "Distribution of Random Exponentials (10k)", cex.main = 0.5)
 abline(v = 5, col = "black", lwd = 2)
+```
 
+### Simulations
+Instead of a single large sample, we will look at the average mean and average variance  
+based on a varying number of simulations on sample of 40 Random Exponential values.  The  
+number of simulations ranges from 1 to 1,000.  As the number of simulations increases  
+from 1 to 1,000, it is expected that the average mean and average variance will more  
+closely compare to the theoretical mean and variance.  Here is a list of attributes or  
+parameters to define the sample populations:
+1. Evaluate exponential distribution, using rexp(n, lambda), where  
++ n = 40 [sample of 40 exponentials]  
++ lambda = 0.2  
+2. Mean, mu, of an exponential distribution is 1/lambda = 5 [1 / 0.2]  
+3. Standard deviation (s) of an exponential distribution is 1/lambda = 5  
+4. Variance, Var, of an exponential distribution is s-squared, 25
 
+#### Sample Mean Simulations
+We will run simulations where we calculate the mean of each sample of 40 random  
+exponentials.
+
+```{r sample.mean.forty, include = TRUE, echo = TRUE}
+set.seed(100)
+mlambda <- 0.2
+msims <- 1000
+n <- 40
+mns = NULL
+for (i in 1: msims) mns <- c(mns, mean(rexp(n,mlambda)))
+```
+
+##### Sample Mean versus Theoretical Mean
+In the first simulation, we will calculate the mean for a single sample  
+of 40 random exponentials.  The mean for this simulation may be considerably different  
+from the theoretical mean.  However, in the final simulation, we will have 1,000 samples  
+of 40 random exponentials.  It is anticipated the mean across each of the 1,000 samples  
+will be more consistent with the theoretical mean.
+
+Below is a comparison graph of the sample mean for each simulation to the theoretical  
+mean.
+```{r plot_simulation_mean_vs_theoretical, include = TRUE, echo = TRUE}
+sim.mean <- cumsum(mns) / (1:msims)
+plot(sim.mean, type = "l", lwd = 1, col = "black", ylim = c(4,5.5),
+     xlab = "Number of Simulations",
+     ylab = "Cumulative Mean",
+     main = "Sample Mean vs. Theoretical Mean", cex.main = 0.5)
+abline(h = 1/mlambda, lwd = 2, col = "red")
+```
+
+#### Sample Variance Simulations
+Similar to the simulation for sample mean we are running simulations and calculating the  
+average variance for simulations with 1 to 1,000 random samples of 40 exponential values.  
+
+```{r sample.variance.forty, include = TRUE, echo = TRUE}
+set.seed(100)
+vlambda <- 0.2
+vsims <- 1000
+n <- 40
+mns = NULL
+for (i in 1: vsims) mns <- c(mns, var(rexp(n,vlambda)))
+```
+
+##### Sample Variance versus Theoretical Variance
+In the first simulation, we will calculate the mean for a single sample  
+of 40 random exponentials.  The mean for this simulation may be considerably different  
+from the theoretical mean.  However, in the final simulation, we will have 1,000 samples  
+of 40 random exponentials.  It is anticipated the mean across each of the 1,000 samples  
+will be more consistent with the theoretical mean.
+
+Below is a comparison graph of the sample mean for each simulation to the theoretical  
+mean.
+```{r plot_simulation_mean_vs_theoretical, include = TRUE, echo = TRUE}
+sim.var <- cumsum(mns) / (1:vsims)
+plot(sim.var, type = "l", lwd = 1, col = "black", ylim = c(0,1),
+     xlab = "Number of Simulations",
+     ylab = "Cumulative Variance",
+     main = "Sample Variance vs. Theoretical Variance", cex.main = 0.5)
+abline(h = (1/vlambda)^2/n, lwd = 2, col = "red")
+```
 
 
