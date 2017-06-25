@@ -10,17 +10,29 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ### Simulation Exercise Overview
-This report will illustrate how well sample populations can provide a reliable picture or understanding of an entire population.  To do this, we will compare the sample means and sample variances for different sample sizes to the theoretical mean and variance.
+This report will illustrate how well sample populations can provide a reliable picture or understanding of an entire population.  To do this, we will compare the sample means and sample variances for different sample sizes to the theoretical mean and variance.  We will be looking at an *Exponential Distribution* to illustrate.  Some facts about this distribution:  
+> 1. Lambda = 0.2
+> 2. Mean of exponential distribution is 1/lambda = 5 [1 / 0.2]  
+> 3. Standard deviation of exponential distribution is 1/lambda or 5  
+> 4. Variance of exponential distribution is 25, standard deviation squared
+```{r include = FALSE, echo = FALSE}
+lambda <- 0.2
+mu <- 1/lambda
+sig <- 1/lambda
+vars <- sig^2
+```
 
-Let's start with a simple comparison.  If we calculate the mean and variance of a large exponential sample population, like 10,000, we would expect this to be fairly close to the theoretical mean and variance.
+If we look at very large population, maybe 10,000 random exponential observations, we might expect to have a mean, standard deviation, and variance that are very close to the theoretical values previously noted. Let's  If we calculate the mean and variance of a large exponential sample population, like 10,000, we would expect this to be fairly close to the theoretical mean and variance.
 
-**Large Sample Mean & Variance (10,000 observations)** 
-```{r, large_sample_data, include = TRUE, echo = TRUE}
+**Large Sample Mean & Variance (10,000 random exponential observations)** 
+```{r, large_sample_data, include = TRUE, echo = FALSE}
 set.seed(100)
-lrg.sample <- data.frame(rating = c(rexp(10000, 0.2)))
+n1 <- 10000                                   ## Large Sample, number of random exponential observations
+lrg.sample <- data.frame(rating = c(rexp(n1, lambda)))
 
-sample.mean <- round(mean(lrg.sample$rating), 3)   ## Population Mean  
-sample.var <- round(var(lrg.sample$rating), 3)     ## Population Variance
+sample.mean <- round(mean(lrg.sample$rating), 3)   ## Population Mean
+for (i in 1: n1) sum.var <- sum((lrg.sample$rating[i] - sample.mean)^2)
+      round(var(lrg.sample$rating), 3)     ## Population Variance
 sample.sd <- round(sd(lrg.sample$rating), 3)       ## Population Standard Deviation
 ```
 
@@ -46,9 +58,7 @@ parameters to define the sample populations:
 1. Evaluate exponential distribution, using rexp(n, lambda), where  
 + n = 40 [sample of 40 exponentials]  
 + lambda = 0.2  
-2. Mean, mu, of an exponential distribution is 1/lambda = 5 [1 / 0.2]  
-3. Standard deviation (s) of an exponential distribution is 1/lambda = 5  
-4. Variance, Var, of an exponential distribution is s-squared, 25
+
 
 #### Sample Mean Simulations
 We will run simulations where we calculate the mean of each sample of 40 random  
