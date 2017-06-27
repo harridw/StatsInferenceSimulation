@@ -2,9 +2,23 @@
 title: "Statistical Inference (Simulation Exercise)"
 author: "EHarris"
 date: "6/25/2017"
-output: html_document:
-      keep_md: yes
+output: html_document
 ---
+
+## Packages for Course 6 Project
+```{r setup, include=TRUE}
+ipak <- function(pkg){
+      new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+      if (length(new.pkg)) 
+            install.packages(new.pkg, dependencies = TRUE)
+      sapply(pkg, require, character.only = TRUE)
+}
+
+### Package Usage
+packages <- c("plyr", "dplyr", "data.table", "dtplyr", "lubridate", "ggplot2", "scales",
+                  "reshape2", "knitr", "R.cache", "stringr", "gtools", "quantreg")
+ipak(packages)
+```
 
 ### Simulation Exercise Overview
 This report will illustrate how well sample populations can provide a reliable picture or understanding of an entire population.  To do this, we will compare the sample means and sample variances for different sample sizes to the theoretical mean and variance.  We will be looking at an *Exponential Distribution* to illustrate.  Some facts about this distribution:  
@@ -111,7 +125,7 @@ plot(sim.var, type = "l", lwd = 2, col = "black",
      xlab = "Number of Samples",
      ylab = "Cumulative Variance",
      main = "Sample Variance vs. Theoretical Variance", cex.main = 1.0)
-abline(h = (1/vlambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
+abline(h = (1/lambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
 ```
 
 
