@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ## Packages for Course 6 Project
-```{r setup, include=TRUE}
+```{r setup, include = TRUE, echo = TRUE, results = FALSE}
 ipak <- function(pkg){
       new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
       if (length(new.pkg)) 
