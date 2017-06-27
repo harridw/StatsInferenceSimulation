@@ -2,12 +2,9 @@
 title: "Statistical Inference (Simulation Exercise)"
 author: "EHarris"
 date: "6/25/2017"
-output: html_document
+output: html_document:
+      keep_md: yes
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ### Simulation Exercise Overview
 This report will illustrate how well sample populations can provide a reliable picture or understanding of an entire population.  To do this, we will compare the sample means and sample variances for different sample sizes to the theoretical mean and variance.  We will be looking at an *Exponential Distribution* to illustrate.  Some facts about this distribution:  
@@ -41,7 +38,7 @@ Here is a comparison the sample mean & variance to the theoretical:
 Pretty close. Although, you might have expected the sample variance to be a little closer to the theoretical variance.  
 
 Let's look at a density distribution for sample population
-```{r population_density_histogram, include = TRUE, echo = TRUE}
+```{r population_density_histogram, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
 hist(lrg.sample$rating, prob = TRUE, breaks = 40, col = "red", xlab = "", ylim = c(0, .2),
      main = "Distribution of Random Exponentials (10k)", cex.main = 1.0)
 abline(v = 5, col = "black", lwd = 2)
@@ -61,17 +58,17 @@ Instead of a single large sample, we will look at the average mean and average v
 ```{r sample.mean.forty, include = TRUE, echo = TRUE}
 set.seed(100)
 nsamp <- 1000
-n <- 40
+n <- 40             ## Sample size (number of random exponentials in each sample)
 msim = NULL
 for (i in 1: nsamp) msim <- c(msim, mean(rexp(n,lambda)))
 ```
 
 ##### Plot 1: Sample Mean versus Theoretical Mean
 Here we plot the average mean for each simulation.  The x-axis reflects the number of samples within the simulation, between 1 and 1,000 samples within each simulation.  The y-axis reflects the calculated average mean within each simulation.  A line is included on the y-axis representing the theoretical mean, 1/lambda which equals 5 [1/0.2].
-```{r plot_simulation_mean_vs_theoretical, include = TRUE, echo = TRUE}
+```{r plot_simulation_mean_vs_theoretical, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
 sim.mean <- cumsum(msim) / (1:nsamp)
 plot(sim.mean, type = "l", lwd = 2, col = "black", ylim = c(4,5.5),
-     xlab = "Number of Simulations",
+     xlab = "Number of Samples",
      ylab = "Cumulative Mean",
      main = "Sample Mean vs. Theoretical Mean", cex.main = 1.0)
 abline(h = 1/lambda, lwd = 2, col = "red")         ## Line for Theoretical Mean
@@ -80,7 +77,7 @@ abline(h = 1/lambda, lwd = 2, col = "red")         ## Line for Theoretical Mean
 This plot would seem to confirm that, as the number of simulations or samples increases, the Sample Mean closely approximates the Theoretical Mean.  By the time we use 600 simulations, the Sample Mean and Theoretical Mean are almost identical.  The other thing we wanted to check is whether the distribution of the sample mean would represent a normal distribution.  Here we will illustrate a histogram representing the mean values for each of the 1,000 samples.  Since the Theoretical Mean is 5 (1/lambda), we should anticipate that the greatest number, count, of means would be around 5.
 
 ##### Plot 2: Sample Mean Distribution
-```{r sample.mean.distribution_hist, include = FALSE, echo = FALSE, results = TRUE}
+```{r sample.mean.distribution_hist, echo = FALSE, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
 hist(msim, prob = TRUE, breaks = 40,
      xlab = "Sample Mean",
      main = "Histogram with Distribution of Sample Mean")
@@ -91,20 +88,27 @@ The histogram does have the general shape of a normal distribution.  It is worth
 #### Sample Variance Simulations
 Now let look at Sample Varance.  Similar to the simulation for sample mean we are running simulations and calculating the average variance for simulations with 1 to 1,000 random samples of 40 exponential values.  
 
+To calculate sample variance we use the following formula:  $1/(n -1) \Sigma (x_i - \mu)^{2}$.
+
+
 ```{r sample.variance.forty, include = TRUE, echo = TRUE}
 set.seed(100)
 vsim = NULL
-for (i in 1: nsamp) vsim <- c(vsim, var(rexp(n,lambda)))
+for (i in 1: nsamp) {
+      x <- rexp(n,lambda)
+      mean.x <- mean(x)
+      vsim <- c(vsim, sum(c((x - mean.x)^2))/(n-1))
+}
 ```
 
 ##### Sample Variance versus Theoretical Variance
 In the first simulation, we will calculate the mean for a single sample of 40 random exponentials.  The mean for this simulation may be considerably different from the theoretical mean.  However, in the final simulation, we will have 1,000 samples of 40 random exponentials.  It is anticipated the mean across each of the 1,000 samples will be more consistent with the theoretical mean.
 
 Below is a comparison graph of the sample mean for each simulation to the theoretical mean.
-```{r plot_simulation_variance_vs_theoretical, include = TRUE, echo = TRUE}
-sim.var <- cumsum(mns) / (1:vsims)
-plot(sim.var, type = "l", lwd = 2, col = "black", ylim = c(10,30),
-     xlab = "Number of Simulations",
+```{r plot_simulation_variance_vs_theoretical, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
+sim.var <- cumsum(vsim) / (1:nsamp)
+plot(sim.var, type = "l", lwd = 2, col = "black",
+     xlab = "Number of Samples",
      ylab = "Cumulative Variance",
      main = "Sample Variance vs. Theoretical Variance", cex.main = 1.0)
 abline(h = (1/vlambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
