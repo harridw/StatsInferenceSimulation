@@ -1,12 +1,12 @@
 ---
 title: "Statistical Inference (Simulation Exercise)"
 author: "EHarris"
-date: "6/25/2017"
+date: "6/27/2017"
 output: html_document
 ---
 
 ## Packages for Course 6 Project
-```{r setup, include = TRUE, echo = TRUE, results = "hide"}
+```{r setup, include = TRUE, echo = FALSE, results = "hide"}
 ipak <- function(pkg){
       new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
       if (length(new.pkg)) 
@@ -22,10 +22,10 @@ ipak(packages)
 
 ### Simulation Exercise Overview
 This report will illustrate how well sample populations can provide a reliable picture or understanding of an entire population.  To do this, we will compare the sample means and sample variances for different sample sizes to the theoretical mean and variance.  We will be looking at an *Exponential Distribution* to illustrate.  Some facts about this distribution:  
-> 1. Lambda = 0.2
-> 2. Mean of exponential distribution is 1/lambda = 5 [1 / 0.2]  
-> 3. Standard deviation of exponential distribution is 1/lambda or 5  
-> 4. Variance of exponential distribution is 25, standard deviation squared
+1. Lambda = 0.2
+2. Mean of exponential distribution is 1/lambda = 5 [1 / 0.2]  
+3. Standard deviation of exponential distribution is 1/lambda or 5  
+4. Variance of exponential distribution is 25, standard deviation squared
 ```{r include = FALSE, echo = FALSE}
 lambda <- 0.2
 mu <- 1/lambda
@@ -46,27 +46,28 @@ sample.var <- round(sum(lrg.sample$diff.square)/(n.lrg-1) ,3)   ## For sample va
 ```
 
 Here is a comparison sample versu theoretical:  
-* Mean: Sample `r sample.mean` versus a Theoretical of `r mu`
+* Mean: Sample `r sample.mean` versus a Theoretical of `r mu`  
 * Variance: Sample `r sample.var` versus a Theoretical of `r vars`
 
 Pretty close. Although, you might have expected the sample variance to be a little closer to the theoretical variance.  
 
-Let's look at a density distribution for sample population
+Let's look at a density distribution for this sample of 10,000 random exponential values.
 ```{r population_density_histogram, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
+par(mfcol = c(1,1), mar = c(6,4,4,1))
 hist(lrg.sample$rating, prob = TRUE, breaks = 40, col = "red", xlab = "", ylim = c(0, .2),
      main = "Distribution of Random Exponentials (10k)", cex.main = 1.0)
 abline(v = 5, col = "black", lwd = 2)
 ```
 
 ### Simulations
-Instead of a single large sample, we will look at the average mean and average variance based on a varying number of simulations on sample of 40 Random Exponential values.  Below is a brief outline of steps to be followed for our simulation.  Our expectation is that, as the number of samples within a simulation increases, the average mean and variance will draw nearer to the theoretical values.
-> 1. Simuluations will include 1 to 1,000 random sample exponenetial (variable name = 'nsamp')
-> 2. Evaluate exponential distribution, using rexp(n, lambda), where  
->    + n = 40 [random sample of 40 exponentials]  
->    + lambda = 0.2
-> 3. Calculate the mean and variance for each sample of 40 random exponentials within a simulation
-> 4. Calculate an avearge mean and variance of all samples within a simulation.
-> 5. Plot / compare the average mean and variance against the theoritical values
+Instead of a single large sample, we will look at the average mean and average variance based on a varying number of simulations on sample of 40 Random Exponential values.  Below is a brief outline of steps to be followed for our simulation.  Our expectation is that, as the number of samples within a simulation increases, the average mean and variance will draw nearer to the theoretical values.  
+1. Simuluations will include 1 to 1,000 random sample exponenetial (variable name = 'nsamp')  
+2. Evaluate exponential distribution, using rexp(n, lambda), where  
+    + n = 40 [random sample of 40 exponentials]  
+    + lambda = 0.2  
+3. Calculate the mean and variance for each sample of 40 random exponentials within a simulation  
+4. Calculate an avearge mean and variance of all samples within a simulation  
+5. Plot / compare the average mean and variance against the theoritical values  
 
 #### Sample Mean Simulations
 ```{r sample.mean.forty, include = TRUE, echo = TRUE}
@@ -81,7 +82,7 @@ for (i in 1: nsamp) msim <- c(msim, mean(rexp(n,lambda)))
 Here we plot the average mean for each simulation. The x-axis reflects the number of samples within the simulation, reflecting between 1 and 1,000 samples. The y-axis reflects the calculated average mean within each simulation. A line is included on the y-axis representing the theoretical mean, 1/lambda which equals 5 [1/0.2].
 ```{r plot_simulation_mean_vs_theoretical, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
 sim.mean <- cumsum(msim) / (1:nsamp)
-par(mfcol = c(1,2), mar = c(5,4,4,1))
+par(mfcol = c(1,2), mar = c(6,4,4,1))
 plot(sim.mean, type = "l", lwd = 2, col = "black", ylim = c(4,5.5),
      xlab = "Number of Samples",
      ylab = "Cumulative Mean",
@@ -89,8 +90,11 @@ plot(sim.mean, type = "l", lwd = 2, col = "black", ylim = c(4,5.5),
 abline(h = 1/lambda, lwd = 2, col = "red")         ## Line for Theoretical Mean
 
 hist(msim, prob = TRUE, breaks = 40,
-     xlab = "Sample Mean", xlim = c(1,9),
-     main = "Histogram with Distribution of Sample Mean (1,000 Samples")
+     xlab = "Sample Mean", xlim = c(2,8),
+     main = "Distribution of Mean (1,000 Samples)", cex.main = 0.9)
+lines(seq(min(msim), max(msim), length = 100),
+      dnorm(seq(min(msim), max(msim), length = 100), mean = mean(msim), sd = sd(msim)),
+      col = "blue", lwd = 2)
 abline(v = 1/lambda, lwd = 2, col = "red")  
 ```
 
@@ -120,16 +124,19 @@ In the first simulation, we will calculate the mean for a single sample of 40 ra
 Below is a comparison graph of the sample mean for each simulation to the theoretical mean.
 ```{r plot_simulation_variance_vs_theoretical, fig.keep = "all", fig.show = "asis", fig.path = 'figure/'}
 sim.var <- cumsum(vsim) / (1:nsamp)
-par(mfcol = c(1,2), mar = c(5,4,4,1))
+par(mfcol = c(1,2), mar = c(6,4,4,1))
 plot(sim.var, type = "l", lwd = 2, col = "black",
      xlab = "Number of Samples",
      ylab = "Cumulative Variance",
-     main = "Sample Variance vs. Theoretical Variance", cex.main = 1.0)
+     main = "Sample Variance vs. Theoretical Variance", cex.main = 0.8)
 abline(h = (1/lambda)^2, lwd = 2, col = "red")      ## Line for Theoretical Variance
 
-hist(vsim, prob = TRUE, breaks = 40,
-     xlab = "Sample Variance", xlim = c(10,40),
-     main = "Histogram with Distribution of Sample Variance (1,000 Samples)")
+hist(vsim, prob = TRUE, breaks = 100,
+            xlab = "Sample Variance", xlim = c(0,100), ylim = c(0.00, 0.06),
+            main = "Distribution of Variance(1,000 Samples)", cex.main = 0.8)
+lines(seq(min(vsim), max(vsim), length = 100),
+      dnorm(seq(min(vsim), max(vsim), length = 100), mean = mean(vsim), sd = sd(vsim)),
+      col = "blue", lwd = 2)
 abline(v = (1/lambda)^2, lwd = 2, col = "red")
 ```
 
